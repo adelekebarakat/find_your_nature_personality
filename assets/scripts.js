@@ -1,4 +1,4 @@
-const questions = [
+ const questions = [
             {
                 question: "🌅 How do you prefer to start your morning?",
                 answers: [
@@ -134,6 +134,7 @@ const questions = [
                 button.className = 'answer-btn';
                 button.textContent = answer.text;
                 button.onclick = () => selectAnswer(answer.nature);
+                button.disabled = false; // Ensure buttons are enabled
                 answersContainer.appendChild(button);
             });
             
@@ -141,14 +142,25 @@ const questions = [
         }
 
         function selectAnswer(nature) {
-            scores[nature]++;
-            currentQuestion++;
+            // Add visual feedback for selected answer
+            const selectedButton = event.target;
+            selectedButton.classList.add('selected');
             
-            if (currentQuestion < questions.length) {
-                showQuestion();
-            } else {
-                showResult();
-            }
+            // Disable all buttons temporarily
+            const allButtons = document.querySelectorAll('.answer-btn');
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            // Wait a moment to show selection, then proceed
+            setTimeout(() => {
+                scores[nature]++;
+                currentQuestion++;
+                
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }, 800); // 800ms delay to show selection
         }
 
         function updateProgress() {
